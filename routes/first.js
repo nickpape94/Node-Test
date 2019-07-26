@@ -73,6 +73,9 @@ router.post("/create", (req, res) => {
             prod.save().then(item => res.json(item))
                .catch(err => console.log(err));
     });
+
+    
+
 });
 
         
