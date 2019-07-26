@@ -72,9 +72,11 @@ router.post("/create", (req, res) => {
         bcrypt.hash(req.body.password, salt, (err, hash) => {
             if (err) throw err;
             prod.password = hash;
-            prod.save().then(item => res.json(item))
+            prod.save().then(item => res.json(payload))
                .catch(err => console.log(err));
     });
+
+
 
         bcrypt.hash(req.body.password, salt, (err, hash) => {
         if (err) throw err;
@@ -83,19 +85,37 @@ router.post("/create", (req, res) => {
            .catch(err => console.log(err));
 });
 
+        bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(req.body.passwordRepeat, salt, (err, hash) => {
+        if (err) throw err;
+        prod.passwordRepeat = hash;
+        prod.save().then(item => res.json(item))
+                .catch(err => console.log(err));                
+        })   
+});
+        bcrypt.hash(req.body.passwordRepeat, salt, (err, hash) => {
+        if (err) throw err;
+        prod.passwordRepeat = hash;
+        prod.save().then(item => res.json(item))
+           .catch(err => console.log(err));
+
+        })
+
         
 
+        
+        // if (req.body.password !== req.body.passwordRepeat) {
+        //         throw(err)
+        // } else {
+        //         return req.body.password;
+        // }
 
 
-            
 
-    
 
 });
 
-        
-
-});
+        });
 
 
 
@@ -147,4 +167,3 @@ function objectcombiner(name, con) {
         return object;
 }
 module.exports = router;
-

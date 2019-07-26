@@ -10,7 +10,8 @@ let errors = {};
 
 router.userName = !isEmpty(router.userName) ? router.userName : "";
 router.password = !isEmpty(router.password) ? router.password : "";
-router.passwordRepeat = !isEmpty(router.passwordRepeat) ? router.passwordRepeat : "";
+// router.passwordRepeat = !isEmpty(router.passwordRepeat) ? router.passwordRepeat : "";
+
 // router.email = isEmail(router.email) ? router.email : "";
 
 //login validation
@@ -32,8 +33,11 @@ if (validator.isEmpty(router.passwordRepeat)) {
 }
 
 if (!validator.equals(router.password, router.passwordRepeat)) {
-    errors.password = "Passwords dont match"
+    errors.passwordRepeat = "Passwords do not match"
+    
 }
+
+
 
 
 
