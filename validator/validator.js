@@ -3,11 +3,14 @@ const isEmpty = require("./is-empty");
 
 
 
+
 exports.itemVal = function validateUsernameInput(router) {
 let errors = {};
 
 
 router.userName = !isEmpty(router.userName) ? router.userName : "";
+router.password = !isEmpty(router.password) ? router.password : "";
+// router.email = isEmail(router.email) ? router.email : "";
 
 //login validation
 if (validator.isEmpty(router.userName)) {
