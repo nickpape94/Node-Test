@@ -69,11 +69,11 @@ router.post("/create", (req, res) => {
         bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(req.body.password, salt, (err, hash) => {
             if (err) throw err;
-            prod.email = hash;
+            prod.password = hash;
             prod.save().then(item => res.json(item))
                .catch(err => console.log(err));
     });
-});
+});s
 
         
 
