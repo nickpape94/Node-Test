@@ -19,7 +19,7 @@ if (validator.isEmpty(router.userName)) {
 
 
 if (!validator.isEmail(router.email)) {
-    errors.userName = "Not a valid email"
+    errors.email = "Not a valid email"
 }
 
 if (validator.isEmpty(router.password)) {
