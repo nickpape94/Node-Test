@@ -3,25 +3,27 @@ const bodyParser = require("body-parser");
 const _ = require("lodash");
 const product = require('../models/itemsModel')
 const validator = require("../validator/validator");
+const bcrypt = require("bcrypt");
 // const isEmpty = require("../validator/is-empty");
 
 
 const router = express.Router();
-const arrayList = ["Kevin sorbo", "Kevin Cosner"];
 
 
-// @route GET first/test
-// @desc Tests first route
-// @access Public
-router.get("/test", (req, res) => {
-        res.send(arrayList);
-});
+
 
 // @route GET first/
 // @desc Tests default route
 // @access Public
-router.get("/", (req, res) => {
-        res.json({ message: "Default First" })
+router.get("/username", (req, res) => {
+        const errors = {};
+        product.find({userName:req.body.userName})
+                .then(items => {
+                        if (!items) {
+                                errors.noItems = "Not a valid username";
+                                req.status(404).json(errors);
+                        }
+                })
 });
 
 // @route   GET item/all
@@ -47,13 +49,14 @@ router.get("/all", (req, res) => {
 // @desc    POST an item
 // @access  Public      
 router.post("/create", (req, res) => {
-
+        payload = {};
         const prod = new product({
                 userName: req.body.userName,
-                content: req.body.content
+                email: req.body.email,
+                password: req.body.password
         }) 
-        
-        const response = validator.itemVal(prod)  
+
+         const response = validator.itemVal(prod)  
         if (response.isValid) {
           prod.save().then(() => res.send('complete')) 
           .catch((err) => res.send(err)) 
@@ -61,16 +64,24 @@ router.post("/create", (req, res) => {
         else {
                 res.send(response.errors)
         }
-     
+        
 
-})
+        bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(req.body.password, salt, (err, hash) => {
+            if (err) throw err;
+            prod.email = hash;
+            prod.save().then(item => res.json(item))
+               .catch(err => console.log(err));
+    });
+});
+
+        
+
+});
 
 
 
-
-
-
-
+        
 router.put("/update", (req, res) => {
 
         let name = req.body.userName;
@@ -92,6 +103,21 @@ router.delete("/delete", (req, res) => {
         (err) => res.send(err);
 
 });
+
+router.delete("/delete1", (req, res) => {
+
+        product.findById(req.body._id).then(item => {
+
+        item
+        .remove()
+        .then(() => {
+            res.json({success: true});
+        })       
+        .catch(err =>
+                res.status(404).json({ itemnotfound: "No item found"})
+        );
+     });
+});    
 
 
 
