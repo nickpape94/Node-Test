@@ -10,6 +10,7 @@ let errors = {};
 
 router.userName = !isEmpty(router.userName) ? router.userName : "";
 router.password = !isEmpty(router.password) ? router.password : "";
+router.passwordRepeat = !isEmpty(router.passwordRepeat) ? router.passwordRepeat : "";
 // router.email = isEmail(router.email) ? router.email : "";
 
 //login validation
@@ -25,6 +26,16 @@ if (!validator.isEmail(router.email)) {
 if (validator.isEmpty(router.password)) {
     errors.password = "Password is required"
 }
+
+if (validator.isEmpty(router.passwordRepeat)) {
+    errors.passwordRepeat = "You must confirm password"
+}
+
+if (!validator.equals(router.password, router.passwordRepeat)) {
+    errors.password = "Passwords dont match"
+}
+
+
 
 return {
 errors,

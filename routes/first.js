@@ -53,7 +53,8 @@ router.post("/create", (req, res) => {
         const prod = new product({
                 userName: req.body.userName,
                 email: req.body.email,
-                password: req.body.password
+                password: req.body.password,
+                passwordRepeat: req.body.passwordRepeat
         }) 
 
          const response = validator.itemVal(prod)  
@@ -64,6 +65,7 @@ router.post("/create", (req, res) => {
         else {
                 res.send(response.errors)
         }
+
         
 
         bcrypt.genSalt(10, (err, salt) => {
@@ -73,6 +75,19 @@ router.post("/create", (req, res) => {
             prod.save().then(item => res.json(item))
                .catch(err => console.log(err));
     });
+
+        bcrypt.hash(req.body.password, salt, (err, hash) => {
+        if (err) throw err;
+        prod.password = hash;
+        prod.save().then(item => res.json(item))
+           .catch(err => console.log(err));
+});
+
+        
+
+
+
+            
 
     
 

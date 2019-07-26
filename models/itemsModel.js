@@ -18,6 +18,11 @@ var productSchema = new Schema({
           type: String,
           required: true
 
+     },
+
+     passwordRepeat: {
+          type: String,
+          required: true
      }
 });     
 
