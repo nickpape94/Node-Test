@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const _ = require("lodash");
 const Login = require("../models/loginModel");
-const validator = require("../validator/validator");
+const validator = require("../validator/userLogin");
 const bcrypt = require("bcrypt");
 // const isEmpty = require("../validator/is-empty");
 
