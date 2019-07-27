@@ -2,14 +2,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 let mongoose = require("mongoose");
 
-const first = require("./routes/first.js");
+const login = require("./routes/login");
 const app = express();
 
 
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use("/first", first);
+app.use("/login", login);
 
 
 
