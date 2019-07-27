@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const _ = require("lodash");
-const product = require('../models/loginModel')
+const Login = require('../models/loginModel.js')
 const validator = require("../validator/validator");
 const bcrypt = require("bcrypt");
 // const isEmpty = require("../validator/is-empty");
@@ -12,12 +12,12 @@ const router = express.Router();
 
 
 
-// @route GET first/
-// @desc Tests default route
+// @route GET user/
+// @desc Get a user
 // @access Public
-router.get("/username", (req, res) => {
+router.get("/getAUser", (req, res) => {
         const errors = {};
-        product.find({userName:req.body.userName})
+        Login.findOne({userNam})
                 .then(items => {
                         if (!items) {
                                 errors.noItems = "Not a valid username";
@@ -48,74 +48,52 @@ router.get("/all", (req, res) => {
 // @route   POST item/all
 // @desc    POST an item
 // @access  Public      
-router.post("/create", (req, res) => {
-        payload = {};
-        const prod = new product({
+router.post("/addAUser", (req, res) => {
+        const errors = {};
+        const newUser = new Login({
                 userName: req.body.userName,
                 email: req.body.email,
-                password: req.body.password,
-                passwordRepeat: req.body.passwordRepeat
-        }) 
-
-         const response = validator.itemVal(prod)  
-        if (response.isValid) {
-          prod.save().then(() => res.send('complete')) 
-          .catch((err) => res.send(err)) 
-        }
-        else {
-                res.send(response.errors)
-        }
-
-        
-
-        bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(req.body.password, salt, (err, hash) => {
-            if (err) throw err;
-            prod.password = hash;
-            prod.save().then(item => res.json(payload))
-               .catch(err => console.log(err));
-    });
-
-
-
-        bcrypt.hash(req.body.password, salt, (err, hash) => {
-        if (err) throw err;
-        prod.password = hash;
-        prod.save().then(item => res.json(item))
-           .catch(err => console.log(err));
-});
-
-        bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(req.body.passwordRepeat, salt, (err, hash) => {
-        if (err) throw err;
-        prod.passwordRepeat = hash;
-        prod.save().then(item => res.json(item))
-                .catch(err => console.log(err));                
-        })   
-});
-        bcrypt.hash(req.body.passwordRepeat, salt, (err, hash) => {
-        if (err) throw err;
-        prod.passwordRepeat = hash;
-        prod.save().then(item => res.json(item))
-           .catch(err => console.log(err));
-
+                password: req.body.password
+                
         })
+        
+        const searchUser = { userName: req.body.username };
+        const searchEmail = { email: req.body.email };
+
+         
+        Login.findOne(searchEmail)
+            .then(user => {
+                if (!user) {
+                    Login.findOne(searchUser).then(user => {
+                         if (!user) {
+                             bcrypt.genSalt(10, (err, salt) => {
+                                  bcrypt.hash(newUser.password, salt, (err, hash) => {
+                                          if (err) {
+                                                  res.status(404).send(err)
+                                          } else {
+                                                  newUser.password = hash;
+                                                  newUser.save().then(() =>res.send(success)).catch(err => res.status(404).send(err));
+                                          }
+                                  })   
+                             });
+                         } else {
+                                 errors.userName = "username taken";
+                                 res.status(404).send(errors);
+                         }  
+                    }).catch(err => res.status(404).send(err));    
+                } else {
+                        errors.email = "email taken";
+                        res.status(404).send(errors);
+                }
+            }).catch(err => res.status(404).send(err));
 
         
-
-        
-        // if (req.body.password !== req.body.passwordRepeat) {
-        //         throw(err)
-        // } else {
-        //         return req.body.password;
-        // }
-
 
 
 
 });
 
-        });
+        
 
 
 
