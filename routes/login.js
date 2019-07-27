@@ -33,7 +33,7 @@ router.get("/getAUser", (req, res) => {
 router.get("/login", (req, res) => {
         const errors = {};
 
-        const search = { username: req.body.userName };
+        const search = { userName: req.body.userName };
         
         Login.findOne(search).then(user => {
              if (!user) {
@@ -77,7 +77,7 @@ router.post("/addAUser", (req, res) => {
                 
         })
         
-        const searchUser = { userName: req.body.username };
+        const searchUser = { userName: req.body.userName };
         const searchEmail = { email: req.body.email };
 
          
