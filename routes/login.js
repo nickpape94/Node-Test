@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const _ = require("lodash");
-const product = require('../models/itemsModel')
+const product = require('../models/loginModel')
 const validator = require("../validator/validator");
 const bcrypt = require("bcrypt");
 // const isEmpty = require("../validator/is-empty");
