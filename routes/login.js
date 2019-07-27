@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const _ = require("lodash");
 const Login = require("../models/loginModel");
-const validator = require("../validator/userLogin");
+const validateUserInput = require("../validator/userLogin");
 const bcrypt = require("bcrypt");
 // const isEmpty = require("../validator/is-empty");
 
@@ -17,6 +17,7 @@ const router = express.Router();
 // @access Public
 router.get("/getAUser", (req, res) => {
         const errors = {};
+        
         Login.findOne({userName})
                 .then(items => {
                         if (!items) {
@@ -50,6 +51,12 @@ router.get("/all", (req, res) => {
 // @access  Public      
 router.post("/addAUser", (req, res) => {
         const errors = {};
+        const validate = validateUserInput(req.body)
+
+        if (!validate.isValid) {
+                return res.status(404).send(validate.errors)
+        }
+
         const newUser = new Login({
                 userName: req.body.userName,
                 email: req.body.email,
