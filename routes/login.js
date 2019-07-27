@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const _ = require("lodash");
-const Login = require('../models/loginModel.js')
+const Login = require("../models/loginModel");
 const validator = require("../validator/validator");
 const bcrypt = require("bcrypt");
 // const isEmpty = require("../validator/is-empty");
@@ -17,7 +17,7 @@ const router = express.Router();
 // @access Public
 router.get("/getAUser", (req, res) => {
         const errors = {};
-        Login.findOne({userNam})
+        Login.findOne({userName})
                 .then(items => {
                         if (!items) {
                                 errors.noItems = "Not a valid username";
