@@ -27,20 +27,33 @@ router.get("/getAUser", (req, res) => {
                 })
 });
 
-// @route   GET item/all
-// @desc    Get all items
+// @route   GET login/all
+// @desc    Login to account with credentials
 // @access  Public
-router.get("/all", (req, res) => {
+router.get("/login", (req, res) => {
         const errors = {};
-        product.find()
-          .then(items => {
-            if (!items) {
-              errors.noItems = "There are no items";
-              res.status(404).json(errors);
-            }
-            res.json(items);
-          })
-          .catch(err => res.status(404).json({ noItems: "There are no items" }));
+
+        const search = { username: req.body.userName };
+        
+        Login.findOne(search).then(user => {
+             if (!user) {
+                 errors.noUser = "This username does not exist";
+                 res.status(404).json(errors);    
+             } 
+             
+             bcrypt.compare(req.body.password, user.password)
+                .then(isMatch => {
+                  if (isMatch) {      
+                        res.send(success);
+                } else {
+                        errors.password = "Invalid password"
+                        res.status(404).send(errors);
+                }
+        }).catch(err => res.status(404).send(err));
+
+        }).catch(err => res.status(404).send(err));
+          
+          
       });
 
       
