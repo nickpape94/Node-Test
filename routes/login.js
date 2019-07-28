@@ -59,8 +59,8 @@ router.get("/login", (req, res) => {
       
 
 
-// @route   POST item/all
-// @desc    POST an item
+// @route   POST user/user create
+// @desc    POST a user
 // @access  Public      
 router.post("/addAUser", (req, res) => {
         const errors = {};
@@ -113,47 +113,20 @@ router.post("/addAUser", (req, res) => {
 
 });
 
-        
 
 
+//Just for testing!!
+router.get("/getAll", (req, res) => {
+        const errors = {};
+        Login.find().then(items => {
+                if(!items) {
+                        errors.noItems = "There are no users";
+                        res.status(404).json(errors);
+                }
+                res.json(items);
+        }).catch(err => res.status(404).json({noUser: "There are no users"}));
+        });
 
-        
-router.put("/update", (req, res) => {
-
-        let name = req.body.userName;
-        let con = req.body.content;
-        let combined = objectcombiner(name, con);
-
-        _.set(arrayList, 0, combined);
-        res.send(200, arrayList);
-
-});
-
-
-
-router.delete("/delete", (req, res) => {
-
-        _.pullAt(arrayList, 0);
-        res.send(200, arrayList);
-        prod.delete.then(() => res.delete('deleted')),
-        (err) => res.send(err);
-
-});
-
-router.delete("/delete1", (req, res) => {
-
-        product.findById(req.body._id).then(item => {
-
-        item
-        .remove()
-        .then(() => {
-            res.json({success: true});
-        })       
-        .catch(err =>
-                res.status(404).json({ itemnotfound: "No item found"})
-        );
-     });
-});    
 
 
 
