@@ -115,7 +115,7 @@ router.post("/addAUser", (req, res) => {
 
 
 
-//Just for testing!!
+//Get all utilise donly to test application
 router.get("/getAll", (req, res) => {
         const errors = {};
         Login.find().then(items => {
